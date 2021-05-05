@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,14 +60,22 @@ public class BoardController {
     @GetMapping("/form")
     public String form(Model model) { //, @RequestParam(required = false) Long id) {
 //        if(id == null) {
-//            model.addAttribute("board", new Board());
+            model.addAttribute("board", new Board());   // form에서 입력받기전에 입력받을 object를 미리 보내놓음
 //        } else {
 //            Board board = boardRepository.findById(id).orElse(null);
 //            model.addAttribute("board", board);
 //        }
         return "board/form";
     }
-//
+
+    @PostMapping("/form")
+    public String greetingSubmit(@ModelAttribute Board board) {
+    	boardRepository.save(board);
+        return "redirect:/board/list";             // redirect:board/list는 컨트롤러 get()매핑으로 board/list로 이동함
+    }
+
+    
+    //
 //    @PostMapping("/form")
 //    public String postForm(@Valid Board board, BindingResult bindingResult, Authentication authentication) {
 //        boardValidator.validate(board, bindingResult);
@@ -78,5 +87,7 @@ public class BoardController {
 ////        boardRepository.save(board);
 //        return "redirect:/board/list";
 //    }
+    
+    
 
 }
