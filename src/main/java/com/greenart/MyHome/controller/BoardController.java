@@ -4,6 +4,8 @@ package com.greenart.MyHome.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 //import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.greenart.MyHome.model.Board;
 import com.greenart.MyHome.repository.BoardRepository;
+import com.greenart.MyHome.validator.BoardValidator;
 
 //import com.godcoder.myhome.model.Board;
 //import com.godcoder.myhome.repository.BoardRepository;
@@ -39,8 +42,8 @@ public class BoardController {
 //    @Autowired
 //    private BoardService boardService;
 //
-//    @Autowired
-//    private BoardValidator boardValidator;
+    @Autowired                                             //spring의 DI를 이용하기 위한 어노테이션
+    private BoardValidator boardValidator;
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -69,7 +72,11 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String greetingSubmit(@ModelAttribute Board board) {
+    public String greetingSubmit(@Valid Board board, BindingResult bindingResult) {  //bindingResult  Board model에서 입력된값이 오류인지 확인하는 객체?
+    	boardValidator.validate(board, bindingResult);
+    	if (bindingResult.hasErrors()) {   			 //@Valid를 이용하면, service 단이 아닌 객체 안에서, 들어오는 값에 대해 검증을 할 수 있다.
+    	  return "board/form";
+      }
     	boardRepository.save(board);
         return "redirect:/board/list";             // redirect:board/list는 컨트롤러 get()매핑으로 board/list로 이동함
     }
@@ -77,11 +84,8 @@ public class BoardController {
     
     //
 //    @PostMapping("/form")
-//    public String postForm(@Valid Board board, BindingResult bindingResult, Authentication authentication) {
-//        boardValidator.validate(board, bindingResult);
-//        if (bindingResult.hasErrors()) {
-//            return "board/form";
-//        }
+//    public String postForm(, Authentication authentication) {
+//    boardValidator.validate(board, bindingResult);
 //        String username = authentication.getName();
 //        boardService.save(username, board);
 ////        boardRepository.save(board);
