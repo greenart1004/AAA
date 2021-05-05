@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.greenart.MyHome.model.Board;
 import com.greenart.MyHome.repository.BoardRepository;
@@ -52,19 +53,19 @@ public class BoardController {
 //        model.addAttribute("startPage", startPage);
 //        model.addAttribute("endPage", endPage);
         model.addAttribute("boards", boards);     // 앞쪽 "boards" 라는 변수이름으로 프런트에 넘김... 변수값은 뒤쪽 boards에 들어있는값
-        return "board/list";
+        return "board/list"; 
     }
 
-//    @GetMapping("/form")
-//    public String form(Model model, @RequestParam(required = false) Long id) {
+    @GetMapping("/form")
+    public String form(Model model) { //, @RequestParam(required = false) Long id) {
 //        if(id == null) {
 //            model.addAttribute("board", new Board());
 //        } else {
 //            Board board = boardRepository.findById(id).orElse(null);
 //            model.addAttribute("board", board);
 //        }
-//        return "board/form";
-//    }
+        return "board/form";
+    }
 //
 //    @PostMapping("/form")
 //    public String postForm(@Valid Board board, BindingResult bindingResult, Authentication authentication) {

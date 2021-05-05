@@ -10,41 +10,31 @@
     </nav>
 
  <div class="container">
-        <h2>게시판</h2>
+        <h2>게시판</h2><br/>
         <div> 총 건수 : <span th:text="${#lists.size(boards)}"> </span></div>  <!--  //사전에 정의된 utility임 #기호로 사용함()안에는 전달받은 값을 입력 -->
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">번   호</th>
+                <th scope="col">제   목</th>
+                <th scope="col">작 성 자</th>
+                <th scope="col">비   고</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
+              <tr th:each="board : ${boards}" >
+                <td th:text="${board.id}">1</th>
+                <td th:text="${board.title}">Mark</td>
+                <td th:text="${board.content}">Otto</td>
+                <td>홍길동</td>
               </tr>
             </tbody>
-          </table>
-  
-  
-  
-  
+       </table>
+           <div class="text-right">
+               <a type="button" class="btn btn-primary" href="#" th:href="@{/board/form}">쓰기</a>
+           </div>
+
+ 
   
         <!--        <div>총 건수 : <span th:text="${boards.totalElements}"></span></div>
         <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
