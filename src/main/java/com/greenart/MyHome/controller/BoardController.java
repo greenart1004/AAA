@@ -58,13 +58,13 @@ public class BoardController {
     }
 
     @GetMapping("/form")
-    public String form(Model model) { //, @RequestParam(required = false) Long id) {
-//        if(id == null) {
+	public String form(Model model, @RequestParam(required = false) Long id) { /* (required = false)이 속성은 필수인지 아닌지.//필요할때만 id 값을 사용함 */
+        if(id == null) {
             model.addAttribute("board", new Board());   // form에서 입력받기전에 입력받을 object를 미리 보내놓음
-//        } else {
-//            Board board = boardRepository.findById(id).orElse(null);
-//            model.addAttribute("board", board);
-//        }
+        } else {
+            Board board = boardRepository.findById(id).orElse(null);  // findById()는 optional인데 값을 없을때는 null값을 준다
+            model.addAttribute("board", board);
+        }
         return "board/form";
     }
 
