@@ -37,7 +37,7 @@
                 <td><a th:text="${board.id}" th:href="@{/board/form(id=${board.id})}">1</a></th>
                 <td><a  th:text="${board.title}" th:href="@{/board/form(id=${board.id})}">Mark</a></td>
                 <td th:text="${board.content}">Otto</td>
-                <td>홍길동</td>
+                <td th:text="${board.user.username}">홍길동</td>  <!--    -->
               </tr>
             </tbody>
        </table>

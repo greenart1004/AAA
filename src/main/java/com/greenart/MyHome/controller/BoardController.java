@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-//import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-//import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,12 +28,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.greenart.MyHome.model.Board;
 import com.greenart.MyHome.repository.BoardRepository;
+import com.greenart.MyHome.service.BoardService;
 import com.greenart.MyHome.validator.BoardValidator;
 
-//import com.godcoder.myhome.model.Board;
-//import com.godcoder.myhome.repository.BoardRepository;
-//import com.godcoder.myhome.service.BoardService;
-//import com.godcoder.myhome.validator.BoardValidator;
+
 
 @Controller                                       //페이지를 받을때    @RestController  = 데이타를 받을때
 @RequestMapping("/board")
@@ -40,10 +39,10 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
-//
-//    @Autowired
-//    private BoardService boardService;
-//
+
+    @Autowired
+    private BoardService boardService;
+
     @Autowired                                             //spring의 DI를 이용하기 위한 어노테이션
     private BoardValidator boardValidator;
 
@@ -75,26 +74,19 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String greetingSubmit(@Valid Board board, BindingResult bindingResult) {  //bindingResult  Board model에서 입력된값이 오류인지 확인하는 객체?
-    	boardValidator.validate(board, bindingResult);
+    public String postForm(@Valid Board board, BindingResult bindingResult, Authentication authentication) {  //bindingResult  Board model에서 입력된값이 오류인지 확인하는 객체?
+    	boardValidator.validate(board, bindingResult);                                     //Authentication authentication 인증정보를 가져옴
     	if (bindingResult.hasErrors()) {   			 //@Valid를 이용하면, service 단이 아닌 객체 안에서, 들어오는 값에 대해 검증을 할 수 있다.
     	  return "board/form";
       }
+    	// 1- Authentication a = SecurityContextHolder.getContext().getAuthentication();   // 서비스클래스에서 인증된 사용자 정보를 가져오기 위한 참고용
+        // 2 - Principal principal 을 받아서 로긴한 사용자를 가져올수도 있음
+    	// 3 - 아래와 같이 가져온다.getName()으로 가져온다
+    	
+    	String username = authentication.getName();             // 서버에서 가지고 있는 인증정보를 담아줘야 함
+    	boardService.save(username, board);
     	boardRepository.save(board);
         return "redirect:/board/list";             // redirect:board/list는 컨트롤러 get()매핑으로 board/list로 이동함
     }
-
-    
-    //
-//    @PostMapping("/form")
-//    public String postForm(, Authentication authentication) {
-//    boardValidator.validate(board, bindingResult);
-//        String username = authentication.getName();
-//        boardService.save(username, board);
-////        boardRepository.save(board);
-//        return "redirect:/board/list";
-//    }
-    
-    
 
 }

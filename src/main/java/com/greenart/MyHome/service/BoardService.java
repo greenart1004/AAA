@@ -19,7 +19,8 @@ public class BoardService {
     private UserRepository userRepository;
 
     public Board save(String username, Board board) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);   // username을 통해서 user 정보를 가져온다
+
         board.setUser(user);
         return boardRepository.save(board);
     }
