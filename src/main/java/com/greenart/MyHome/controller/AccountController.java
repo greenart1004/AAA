@@ -1,6 +1,7 @@
 package com.greenart.MyHome.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,12 @@ public class AccountController {
 
 	@PostMapping("/register")
 	public String register(User user) {
+		try {
 		userService.save(user);
+		}
+		catch (DataIntegrityViolationException e) {
+			System.out.println("history already exist");
+		}
 		return "redirect:/";                 // get mapping으로 이동한다.
 	}
 }
