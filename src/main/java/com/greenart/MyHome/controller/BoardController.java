@@ -10,7 +10,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 //import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,7 @@ import com.greenart.MyHome.validator.BoardValidator;
 //import com.godcoder.myhome.service.BoardService;
 //import com.godcoder.myhome.validator.BoardValidator;
 
-@Controller
+@Controller                                       //페이지를 받을때    @RestController  = 데이타를 받을때
 @RequestMapping("/board")
 public class BoardController {
 
@@ -46,16 +48,17 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model) {
-    	List<Board> boards = boardRepository.findAll();
-    //(Model model, @PageableDefault(size = 2) Pageable pageable,
-//                       @RequestParam(required = false, defaultValue = "") String searchText) {
-//        Page<Board> boards = boardRepository.findAll(pageable);
-//        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
-//        int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
-//        int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
-//        model.addAttribute("startPage", startPage);
-//        model.addAttribute("endPage", endPage);
+    public String list(Model model,@PageableDefault(size = 7) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText) {
+    	//	Page<Board> boards = boardRepository.findAll(pageable);    // PageRequest.of(1, 10)
+        // @RequestParam(required = false, defaultValue = "")은 기본적으로 searchText = null값이 들어가므로 @RequestParam으로 값을 넣어줄수 있음            
+    	// required = false,은 값이 없어도 상관없다는 옵션임
+    	
+    	Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
+     
+    	int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);   //boards.getPageable()은 현재 페이지
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("boards", boards);     // 앞쪽 "boards" 라는 변수이름으로 프런트에 넘김... 변수값은 뒤쪽 boards에 들어있는값
         return "board/list"; 
     }
