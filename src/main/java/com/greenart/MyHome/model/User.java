@@ -3,21 +3,16 @@ package com.greenart.MyHome.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 import lombok.Data;
 
@@ -33,15 +28,15 @@ public class User {
     private Boolean enabled;
 
     @JsonIgnore
-    @OneToMany
+    @ManyToMany
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            name = "User_role",
+            joinColumns = @JoinColumn(name = "User_id"),
+            inverseJoinColumns = @JoinColumn(name = "Role_id"))
     private List<Role> roles = new ArrayList<>();
 
 	//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	  @OneToMany(mappedBy = "user")     //, fetch = FetchType.LAZY
+	  @OneToMany(mappedBy = "User")     //, fetch = FetchType.LAZY
 	//  @JsonIgnore
 	 private List<Board> boards = new ArrayList<>();
 }
