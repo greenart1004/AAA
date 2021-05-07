@@ -30,13 +30,13 @@ public class User {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "User_role",
-            joinColumns = @JoinColumn(name = "User_id"),
-            inverseJoinColumns = @JoinColumn(name = "Role_id"))
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
 	//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	  @OneToMany(mappedBy = "User")     //, fetch = FetchType.LAZY
+	 // @OneToMany(mappedBy = "user")     //, fetch = FetchType.LAZY
 	//  @JsonIgnore
 	 private List<Board> boards = new ArrayList<>();
 }
